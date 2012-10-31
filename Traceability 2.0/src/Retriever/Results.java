@@ -11,7 +11,9 @@ public class Results {
     
     public int getDocCount()
     {
-        //Database db = Database.getInstance();;
+        //Initialize Database
+        //Database db = Database.getInstance();
+        
         int results;
         
         //Query to retrieve the number of Documents
@@ -21,9 +23,6 @@ public class Results {
         //db.submitQuery(query);
         
         //returns the Document count
-        
-        
-        
         return 0;
     }
     
@@ -33,10 +32,11 @@ public class Results {
         return 0;
     }
     
-    //public int[] getDocIds()
-    //{
-        
-    //}
+    
+    public boolean greaterThan(Token t)
+    {
+        return true;
+    }
     
     
 }
