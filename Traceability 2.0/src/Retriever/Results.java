@@ -1,9 +1,10 @@
 package Retriever;
+import java.util.ArrayList;
 
 public class Results {
     
     protected Link[] link;
-    
+ 
     public Results()
     {
         
@@ -17,10 +18,13 @@ public class Results {
         int results;
         
         //Query to retrieve the number of Documents
-        String query = "select count(Quantity) from Token ";
+        String query = "select count(Quantity) from link ";
+        
+        //Submit the query
+        //db.submitQuery(query)
         
         
-        //db.submitQuery(query);
+        
         
         //returns the Document count
         return 0;
@@ -35,8 +39,24 @@ public class Results {
     
     public boolean greaterThan(Token t)
     {
-        return true;
+        //if(this.data>t.data)
+            return true;
     }
     
+    /*
+    Returns an array of doc Ids
+    public int[] getDocIds()
+    {
+        //Database db = db.getInstance
+        
+        String query = "select DocId from link";
+        
+       // int[] docIds;
+        //ArrayList<Integer> docIds = new ArrayList<Integer>();
+        
+       // return docIds;
+    
+    }
+    */
     
 }
