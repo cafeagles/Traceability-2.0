@@ -72,16 +72,20 @@ public class Indexer{
 				TokenTracker tt = new TokenTracker();
 				ChunkQueueThread CQT = new ChunkQueueThread(tt);
 //				CQT.start();
-			
+				String buffer = new String();
+				RegexIndexer regex = new RegexIndexer();
 				while(fileScanner.hasNext()){
-					currentChunk.addLine(new StringBuffer(fileScanner.nextLine()));
-					if (currentChunk.isComplete()){
-						temp = currentChunk.nextChunk();
-						CQT.append(currentChunk);
-						currentChunk = temp;
-						
-					}
+//					currentChunk.addLine(new StringBuffer(fileScanner.nextLine()));
+//					if (currentChunk.isComplete()){
+//						temp = currentChunk.nextChunk();
+//						CQT.append(currentChunk);
+//						currentChunk = temp;
+//						
+//					}
+					buffer += fileScanner.nextLine() + "\n";
 				}
+				regex.split(buffer, tt);
+				System.out.println("Done parsing");
 				CQT.setComplete();
 				while(CQT.isAlive());
 				CQT.run();

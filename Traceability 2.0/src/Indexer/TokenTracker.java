@@ -25,14 +25,12 @@ public class TokenTracker {
 	 * otherwise the value is 1
 	 */
 	public void addCodeToken(String token){
-		if(token.charAt(0) != '/'){
 			if(code.containsKey(token))
 			{	Integer i = code.get(token);
 			code.put(token,++i);
 			}
 			else
 				code.put(token,1);
-		}
 	}
 
 	/*
@@ -41,14 +39,12 @@ public class TokenTracker {
 	 * otherwise the value is 1
 	 */
 	public void addCommentToken(String token){
-		if(token.charAt(0) != '/'){
 			if(comment.containsKey(token))
 			{	Integer i = comment.get(token);
 			comment.put(token,++i);
 			}
 			else
 				comment.put(token,1);	
-		}
 	}
 
 	/*

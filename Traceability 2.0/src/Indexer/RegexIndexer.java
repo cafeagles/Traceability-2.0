@@ -12,13 +12,35 @@ import java.util.regex.Pattern;
 public class RegexIndexer {
 
 
-	public String buffer = new String();
-	private String code = new String();
-	private String comments = new String();
-	public  HashMap<String, Integer> CommentKeyWords = new HashMap<String,Integer>();
-	public  HashMap<String, Integer> CodeKeyWords = new HashMap<String,Integer>();
+	public String buffer;
+	private String code;
+	private String comments;
+	public  HashMap<String, Integer> CommentKeyWords;
+	public  HashMap<String, Integer> CodeKeyWords;
 	
-	public void split(String buffer){
+	public RegexIndexer()
+	{
+		buffer = new String();
+		code = new String();
+		comments = new String();
+		CommentKeyWords = new HashMap<String,Integer>();
+		CodeKeyWords = new HashMap<String,Integer>();
+//		Scanner fileScanner;
+//		try {
+//			fileScanner = new Scanner(new File("C:\\Users\\Chris\\Desktop\\AdverseEventBean.java"));
+//			while(fileScanner.hasNext())
+//			{
+//				buffer += fileScanner.nextLine() + "\n";
+//			}
+//			//System.out.println(buffer);
+//			split(buffer);
+//		} catch (FileNotFoundException e) {
+//				System.out.println(e);
+//		}	
+
+	}
+	
+	public void split(String buffer, TokenTracker tt){
 		
 		
 		Pattern pattern =  Pattern.compile("(//.*\\n)|(\"(?:\\\\[^\"]|\\\\\"|.)*?\")|(?s)/\\*.*?\\*/");
@@ -28,17 +50,18 @@ public class RegexIndexer {
 			 comments += matcher.group();	
 		}
 		code = matcher.replaceAll("");
-		parseComments(comments);
-		parseCode(code);
+		parseComments(comments, tt);
+		parseCode(code, tt);
 	}
 
-	public void parseComments(String comments) {
+	private void parseComments(String comments, TokenTracker tt) {
 		Stemmer s = new Stemmer();
 		StopKeywordRemover stkwremover = StopKeywordRemover.getInstance();
 		
 			//remove non letters
-			Matcher m = Pattern.compile("[\\W\\d]").matcher(comments);
+			Matcher m = Pattern.compile("[\\W\\d_]").matcher(comments);
 			comments = m.replaceAll(" ");
+			comments = splitCamelCase(comments);
 			
 			//split into individual words
 			m = Pattern.compile("\\S+").matcher(comments);
@@ -54,6 +77,7 @@ public class RegexIndexer {
 					temp = s.toString();
 					// add to the hashmap
 					
+					tt.addCommentToken(temp);
 					if (CommentKeyWords.containsKey(temp)) {
 						Integer i = CommentKeyWords.get(temp);
 						CommentKeyWords.put(temp, ++i);
@@ -64,16 +88,16 @@ public class RegexIndexer {
 //		}
 	}
 
-	public void parseCode(String code) {
+	private void parseCode(String code, TokenTracker tt) {
 		Stemmer s = new Stemmer();
 		StopKeywordRemover stkwremover = StopKeywordRemover.getInstance();
 		
 		//remove non letters
-		Matcher m = Pattern.compile("[\\W\\d]").matcher(code);
+		Matcher m = Pattern.compile("[\\W\\d_]").matcher(code);
 		code = m.replaceAll(" ");
 		code = splitCamelCase(code);
 		//split into individual words
-		m = Pattern.compile("\\S+| a-z*A-Z").matcher(code);
+		m = Pattern.compile("\\S+").matcher(code);
 		String temp;
 		while (m.find()) {
 			temp = m.group();
@@ -86,6 +110,7 @@ public class RegexIndexer {
 				s.stem();
 				temp = s.toString();
 				// add to the hashmap
+				tt.addCodeToken(temp);
 				if (CodeKeyWords.containsKey(temp)) {
 					Integer i = CodeKeyWords.get(temp);
 					CodeKeyWords.put(temp, ++i);
@@ -96,7 +121,7 @@ public class RegexIndexer {
 
 	}
 	
-	static String splitCamelCase(String s) {
+	public String splitCamelCase(String s) {
 		   return s.replaceAll(
 		      String.format("%s|%s|%s",
 		         "(?<=[A-Z])(?=[A-Z][a-z])",
@@ -110,14 +135,15 @@ public class RegexIndexer {
 	public static void main(String[] args) {
 		RegexIndexer i = new RegexIndexer();
 		Scanner fileScanner;
+		TokenTracker tt = new TokenTracker();
 		try {
-			fileScanner = new Scanner(new File("C:\\Users\\Chris\\Desktop\\AdverseEventBean.java"));
+			fileScanner = new Scanner(new File("C:\\Users\\Chris\\Desktop\\AddOfficeVisitAction.java"));
 			while(fileScanner.hasNext())
 			{
 				i.buffer += fileScanner.nextLine() + "\n";
 			}
 			//System.out.println(buffer);
-			i.split(i.buffer);
+			i.split(i.buffer, tt);
 		} catch (FileNotFoundException e) {
 				System.out.println(e);
 		}	
