@@ -151,6 +151,7 @@ public class Database {
 			System.out.println("Connection to database failed");
 			System.out.println(e.toString());
 			// handle any errors
+			System.exit(1);
 
 		}
 
