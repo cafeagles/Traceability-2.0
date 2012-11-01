@@ -32,7 +32,7 @@ public class Results {
     
     public int getKeywordFrequency(String keyword )
     {
-        //Database db = Database.getInstance();
+        Database db = Database.getInstance();
         return 0;
     }
     

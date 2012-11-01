@@ -11,17 +11,11 @@ import java.util.Set;
 
 public class Database {
     
-        private final String dbName = "traceability";
-	private final String password = "ab1234";
-	private final String userName = "root";
-	private final String ip = "localhost:3306";
-	private final String driver = "com.mysql.jdbc.Driver";
-	//private final String url = ip;
-	private final String url = "jdbc:mysql://" +ip + "/";
-        
-        private Connection conn = null;
+        private static Database db = null;
+
 	
-	public Database(String[] args){
+	protected Database(String[] args)
+        {
 		
 	}
 	
@@ -34,4 +28,6 @@ public class Database {
 	public Link[] getLinks(){
 		return null;
 	}
+        
 }
+
