@@ -47,8 +47,17 @@ public class Indexer{
 		System.out.println("Indexing: " + fileName);
 //		System.out.println("jkl;");
 //		
-		if(!f.exists()) System.out.println(fileName + " does not exist");
-		
+		if(!f.exists()){
+			System.out.println(fileName + " does not exist");
+			try {
+				File test = new File("LOOK HERE");
+				test.createNewFile();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// If the passed file is a directory, recursively call index on each file
 		if(f.isDirectory()){
 //			System.out.println(fileName + " is a directory*********/***********");
