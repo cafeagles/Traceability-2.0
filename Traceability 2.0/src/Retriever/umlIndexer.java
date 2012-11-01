@@ -16,7 +16,7 @@ import Indexer.Stemmer;
 public class umlIndexer {
 
 	private HashMap<String, Integer> keywords = new HashMap<String, Integer>();
-	String buffer = new String();
+	private String buffer = new String();
 	
 	public umlIndexer(String filename){
 	
@@ -28,7 +28,7 @@ public class umlIndexer {
 			{
 				buffer += fileScanner.nextLine();
 			}
-			
+			System.out.println(buffer);
 		} catch (FileNotFoundException e) {
 				System.out.println(e);
 		}
@@ -49,17 +49,19 @@ public class umlIndexer {
 		 m = Pattern.compile("\\S+").matcher(buffer);
 		 String temp;
 		 while (m.find()) {
-			 temp = m.group().toLowerCase();
-			 s.add(temp.toCharArray(), temp.length());
-			 temp = s.toString();
+			 temp = (m.group().toLowerCase()).trim();
 			 if(!stkwremover.removeWord(temp))
 			 {
+				 s.add(temp.toCharArray(), temp.length());
+				 s.stem();
+				 temp = s.toString();
 				 if(keywords.containsKey(temp))
 					{	Integer i = keywords.get(temp);
 						keywords.put(temp,++i);
 					}
 					else
 						keywords.put(temp,1);
+//				 System.out.println(temp);
 			 }
 		 }
 		 
@@ -69,17 +71,27 @@ public class umlIndexer {
 	{
 		return keywords.keySet();
 	}
+	public HashMap<String, Integer> getKeywordMap()
+	{
+		return keywords;
+	}
+	
 	
 	public static void main(String[] args)
 	{
-		
+		System.out.println("Start\n");
 		umlIndexer uml = new umlIndexer("C:\\Users\\Chris\\Desktop\\uml.txt");
+		HashMap<String, Integer> keywords = uml.getKeywordMap();
 		Set<String> keyset = uml.getKeySet();
 		Iterator<String> it = keyset.iterator();
+		String temp;
 		while (it.hasNext())
 		{
-			System.out.println(it.next());
+			temp = it.next();
+			System.out.println(temp + " " + keywords.get(temp));
 		}
+//		System.out.println(uml.buffer);
+		System.out.println("End\n");
 	}
 }
 
