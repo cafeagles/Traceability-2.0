@@ -26,7 +26,7 @@ public class umlIndexer {
 			fileScanner = new Scanner(new File(filename));
 			while(fileScanner.hasNext())
 			{
-				buffer += fileScanner.nextLine();
+				buffer += fileScanner.nextLine() + "\n";
 			}
 			System.out.println(buffer);
 		} catch (FileNotFoundException e) {
@@ -34,19 +34,20 @@ public class umlIndexer {
 		}
 		umlParse();
 	}
-	
+	/*************************************
+	 * parses the whole uml document and adds keywords to the hashmap
+	 ************************************/
 	public void umlParse(){
 		Stemmer s = new Stemmer();
 		StopKeywordRemover stkwremover = StopKeywordRemover.getInstance();
 		
-		Pattern pattern =  Pattern.compile("\\[.*?\\]");//(?![@',&])
+		Pattern pattern =  Pattern.compile("\\[.*?\\]");//[*anything*]
 		Matcher matcher = pattern.matcher(buffer);
 		 buffer = matcher.replaceAll("");
-		 //System.out.print(buffer);System.out.print("\nDONE2\n");
 		 
-		 Matcher m = Pattern.compile("[\\W\\d]").matcher(buffer);
+		 Matcher m = Pattern.compile("[\\W\\d]").matcher(buffer);//non word and digits
 		 buffer = m.replaceAll(" ");
-		 m = Pattern.compile("\\S+").matcher(buffer);
+		 m = Pattern.compile("\\S+").matcher(buffer);//non spaces
 		 String temp;
 		 while (m.find()) {
 			 temp = (m.group().toLowerCase()).trim();
@@ -55,13 +56,13 @@ public class umlIndexer {
 				 s.add(temp.toCharArray(), temp.length());
 				 s.stem();
 				 temp = s.toString();
+				 //add to the hashmap if it is not a stopword
 				 if(keywords.containsKey(temp))
 					{	Integer i = keywords.get(temp);
 						keywords.put(temp,++i);
 					}
 					else
 						keywords.put(temp,1);
-//				 System.out.println(temp);
 			 }
 		 }
 		 
@@ -71,6 +72,7 @@ public class umlIndexer {
 	{
 		return keywords.keySet();
 	}
+	
 	public HashMap<String, Integer> getKeywordMap()
 	{
 		return keywords;
