@@ -18,6 +18,7 @@ public class umlIndexer {
 	private HashMap<String, Integer> keywords = new HashMap<String, Integer>();
 	private String buffer = new String();
 	
+	//constructor takes a file name as a string
 	public umlIndexer(String filename){
 	
 		String temp;
