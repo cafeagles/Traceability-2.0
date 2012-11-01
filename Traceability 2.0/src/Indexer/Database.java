@@ -14,9 +14,9 @@ import java.util.Set;
 
 public class Database {
 	private final String dbName = "traceability";
-	private final String password = "ab1234";
-	private final String userName = "root";
-	private final String ip = "localhost:3306";
+	private final String password = "freels";
+	private final String userName = "traceablility_app";
+	private final String ip = "24.233.212.34:3306";
 	private final String driver = "com.mysql.jdbc.Driver";
 	//	private final String url = ip;
 	private final String url = "jdbc:mysql://" +ip + "/";
