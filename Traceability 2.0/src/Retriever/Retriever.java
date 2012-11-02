@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +36,9 @@ public class Retriever extends JFrame  implements ActionListener  {
 	Scanner fScan;
 
 
-         List<String> goldenDocs = new LinkedList<String>();
+	List<String> goldenDocs = new LinkedList<String>();
+	String guiFormat = "%-200s %-20s %-20s %-20s \n";
+	
 	/*-- START OF GUI VARIABLES
 	 *All of the variables contained in the GUI Section is only used in the gui and not a part of the actual code 
 	 */
@@ -77,7 +80,45 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 	}
 
-
+    // Get the running f_measure and total f_measure
+	public void f_Measure(List<String> retrieved){
+	      int beta = 2;
+	      int betaSq = beta*beta;
+	      int betaPl = (1+beta) * (1+beta);
+	      
+	      int gold_Recall = goldenDocs.size();
+	      int our_Recall = retrieved.size();
+	      int goldIntersect = 0;
+	      
+	      
+	      
+	      double total_FMeasure;
+	      int total_Precision;
+	      int total_Recall;
+	      
+	      int PR;
+	      
+	      double running_FMeasure;
+	      int running_Precision;
+	      int running_Recall;
+	      
+	      for(String each:retrieved){
+	    	  if(goldenDocs.contains(each))
+	    		  goldIntersect += 1;
+	    	  
+	    	  running_Precision = goldIntersect / our_Recall;
+	    	  running_Recall = goldIntersect / gold_Recall;
+	    	  
+	    	  PR = running_Precision * running_Recall;
+	    	  
+	    	  // (1+beta)^2 * (P*R) / (beta^2 * P) + R
+	    	  running_FMeasure = (betaPl * PR)/(( running_Precision * betaSq) + running_Recall);
+	    	  
+	    	  
+	      }
+	}
+	
+	
 	public void buildGUI(Retriever r){
 
 
@@ -89,8 +130,8 @@ public class Retriever extends JFrame  implements ActionListener  {
 		infoField = new JTextArea();
 		infoField.setEditable(false);
 
-		String test = "%-200s %-20s %-20s %-20s \n";
-		String toinsert = String.format(test,"File :", "Recall:" , "Precision:", "F-Measure:");
+		//String test = "%-200s %-20s %-20s %-20s \n";
+		String toinsert = String.format(guiFormat,"File :", "Recall:" , "Precision:", "F-Measure:");
 		infoField.append(toinsert + "\n");
 
 
@@ -167,20 +208,26 @@ public class Retriever extends JFrame  implements ActionListener  {
 	}
 
 
+	// this gets the goldenfile txt and stores them for future manipulation.
 	public void buildGolden(File f){
+		String filename;
+		String blank = "";
+		
 		try {
-		    fScan = new Scanner(f);
+			fScan = new Scanner(f);
 		} catch (FileNotFoundException e) {}
-                
-                while(fScan.hasNextLine()){
+
+		while(fScan.hasNextLine()){
 			goldenDocs.add(fScan.nextLine());
 		}
-                
-                int size = goldenDocs.size();
-                
-                for (int i = 0; i < size; i++){
-                    System.out.println(goldenDocs.get(i));
-                }
+
+		//used for testing purposes
+		                int size = goldenDocs.size();
+		                
+		                for (int i = 0; i < size; i++){
+		                    filename = goldenDocs.get(i);
+		                    infoField.append(String.format(guiFormat, filename, blank, blank, blank));
+		                }
 	}
 
 
@@ -223,7 +270,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					goldenDoc = fc.getSelectedFile();
 					System.out.println(goldenDoc.getAbsolutePath());
-                                        buildGolden(goldenDoc);
+					buildGolden(goldenDoc);
 				}
 				banalyze = true;
 			}
@@ -252,10 +299,20 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 
 	public static void main(String[] args) {
+		
+		// TODO   use keyword list from the umlIndexer call to pass to the database 
+		//        Get the string list of the files from the database to start the f2 compare
+		//        Determine whether or not to display analysis information
+		//        F2 compare the document list and print out the necessary info to the GUI
+		//        
+		//        
+		
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Retriever ex = new Retriever();
 				ex.setVisible(true);
+				
 
 			}
 		});
