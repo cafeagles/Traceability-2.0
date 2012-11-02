@@ -3,12 +3,14 @@ package Retriever;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,7 +39,8 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 
 	List<String> goldenDocs = new LinkedList<String>();
-	String guiFormat = "%-200s %-20s %-20s %-20s \n";
+	String guiFormat = "%-75s%-20s%-20s%-20s \n";
+	static String test = "%-75s%-20.3f%-20.3f%-20.3f \n";
 	
 	/*-- START OF GUI VARIABLES
 	 *All of the variables contained in the GUI Section is only used in the gui and not a part of the actual code 
@@ -80,43 +83,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 	}
 
-    // Get the running f_measure and total f_measure
-	public void f_Measure(List<String> retrieved){
-	      int beta = 2;
-	      int betaSq = beta*beta;
-	      int betaPl = (1+beta) * (1+beta);
-	      
-	      int gold_Recall = goldenDocs.size();
-	      int our_Recall = retrieved.size();
-	      int goldIntersect = 0;
-	      
-	      
-	      
-	      double total_FMeasure;
-	      int total_Precision;
-	      int total_Recall;
-	      
-	      int PR;
-	      
-	      double running_FMeasure;
-	      int running_Precision;
-	      int running_Recall;
-	      
-	      for(String each:retrieved){
-	    	  if(goldenDocs.contains(each))
-	    		  goldIntersect += 1;
-	    	  
-	    	  running_Precision = goldIntersect / our_Recall;
-	    	  running_Recall = goldIntersect / gold_Recall;
-	    	  
-	    	  PR = running_Precision * running_Recall;
-	    	  
-	    	  // (1+beta)^2 * (P*R) / (beta^2 * P) + R
-	    	  running_FMeasure = (betaPl * PR)/(( running_Precision * betaSq) + running_Recall);
-	    	  
-	    	  
-	      }
-	}
+  
 	
 	
 	public void buildGUI(Retriever r){
@@ -128,9 +95,11 @@ public class Retriever extends JFrame  implements ActionListener  {
 		// Text area for the Scroll Area
 
 		infoField = new JTextArea();
+		Font font = new Font(Font.MONOSPACED, Font.BOLD, 12);
+		infoField.setFont(font);
 		infoField.setEditable(false);
 
-		//String test = "%-200s %-20s %-20s %-20s \n";
+		//String test = "%-100s %-20s %-20s %-20s \n";
 		String toinsert = String.format(guiFormat,"File :", "Recall:" , "Precision:", "F-Measure:");
 		infoField.append(toinsert + "\n");
 
@@ -151,8 +120,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 		infoPan.setLayout(new BorderLayout());
 
 
-		pRes = new JLabel("Total Precision:  ?          Total Recall:  ?                Total F-Measure: ?  " +
-				"");
+		pRes = new JLabel("Total Precision:  ?          Total Recall:  ?                Total F-Measure: ?  " + "");
 
 
 		infoPan.add(pRes, BorderLayout.CENTER);
@@ -206,31 +174,8 @@ public class Retriever extends JFrame  implements ActionListener  {
 		r.add(mDisplay);
 
 	}
-
-
-	// this gets the goldenfile txt and stores them for future manipulation.
-	public void buildGolden(File f){
-		String filename;
-		String blank = "";
-		
-		try {
-			fScan = new Scanner(f);
-		} catch (FileNotFoundException e) {}
-
-		while(fScan.hasNextLine()){
-			goldenDocs.add(fScan.nextLine());
-		}
-
-		//used for testing purposes
-		                int size = goldenDocs.size();
-		                
-		                for (int i = 0; i < size; i++){
-		                    filename = goldenDocs.get(i);
-		                    infoField.append(String.format(guiFormat, filename, blank, blank, blank));
-		                }
-	}
-
-
+	
+	
 	public void actionPerformed(ActionEvent e){
 
 
@@ -243,9 +188,13 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 			if(returnVal == JFileChooser.APPROVE_OPTION){
 				System.out.println("Choose Requirement Document.");
+				
 				requirementsDoc = fc.getSelectedFile();
 				file = requirementsDoc.getAbsolutePath();
+				
 				System.out.println(requirementsDoc.getAbsolutePath());
+				
+				//showing how to do some stuff with the umlIndexer
 				umlIndexer uml = new umlIndexer(file);
 				HashMap<String, Integer> keywords = uml.getKeywordMap();
 				Set<String> keyset = uml.getKeySet();
@@ -255,7 +204,10 @@ public class Retriever extends JFrame  implements ActionListener  {
 					temp = it.next();
 					System.out.println(temp + " " + keywords.get(temp));
 				}
+				
 			}
+			
+			f_Measure(goldenDocs);
 		}
 
 
@@ -295,6 +247,84 @@ public class Retriever extends JFrame  implements ActionListener  {
 		//		}
 
 	}
+	
+	
+	
+	//_____---END GUI CODE> BEGIN PROCEDURAL METHODS
+
+
+	// this gets the goldenfile txt and stores them for future manipulation.
+	public void buildGolden(File f){
+		String filename;
+		String blank = "";
+		
+		try {
+			fScan = new Scanner(f);
+		} catch (FileNotFoundException e) {}
+
+		while(fScan.hasNextLine()){
+			goldenDocs.add(fScan.nextLine().trim());
+		}
+
+//		//used for testing purposes
+//		                int size = goldenDocs.size();
+//		                
+//		                for (int i = 0; i < size; i++){
+//		                    filename = goldenDocs.get(i);
+//		                    infoField.append(String.format(guiFormat, filename, blank, blank, blank));
+//		                }
+	}
+	
+	
+	
+	  // Get the running f_measure and total f_measure
+		public void f_Measure(List<String> retrieved){
+			  String guiUpdate;
+		      double beta = 2;
+		      double betaSq = beta*beta;
+		      double betaPl = (1+beta) * (1+beta);
+		      
+		      double gold_Recall = goldenDocs.size();
+		      double our_Recall = retrieved.size();
+		      
+		      
+		      double goldIntersect = 0.0;
+		     
+		      double PR;
+		      
+		      double running_FMeasure = 0.0;
+		      double running_Precision= 0.0;
+		      double running_Recall = 0.0;
+		      
+		      for(String each:retrieved){
+		    	  if(goldenDocs.contains(each))
+		    		  goldIntersect += 1;
+		    	  
+		    	  
+		    	  
+		    	  running_Precision = goldIntersect / our_Recall;
+		    	  running_Recall = goldIntersect / gold_Recall;
+		    	  
+		    	  
+		    	  PR = running_Precision * running_Recall;
+		    	  
+		    	  // (1+beta)^2 * (P*R) / (beta^2 * P) + R
+		    	  running_FMeasure = (betaPl * PR)/(( running_Precision * betaSq) + running_Recall);
+		    	  
+		    	  DecimalFormat threeDec = new DecimalFormat("0.000");
+		    	  
+		    	
+		    	  infoField.append(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
+		    	  System.out.println(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
+		    }
+		      
+		      String format = "Total Precision:  %.3f          Total Recall:  %.3f                Total F-Measure: %.3f";
+		      guiUpdate = String.format(format,running_Precision, running_Recall, running_FMeasure);
+		      pRes.setText(guiUpdate);
+		}
+
+
+
 
 
 
@@ -306,9 +336,13 @@ public class Retriever extends JFrame  implements ActionListener  {
 		//        F2 compare the document list and print out the necessary info to the GUI
 		//        
 		//        
+		//String test = "%-40s %-2.3f";
 		
 		
 		SwingUtilities.invokeLater(new Runnable() {
+			
+			
+			
 			public void run() {
 				Retriever ex = new Retriever();
 				ex.setVisible(true);
