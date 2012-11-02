@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -25,41 +26,56 @@ import javax.swing.SwingUtilities;
 
 public class Retriever extends JFrame  implements ActionListener  {
 
+
 	static String file = new String();
+	File requirementsDoc, goldenDoc;
+	Scanner fScan;
+
+
+	/*-- START OF GUI VARIABLES
+	 *All of the variables contained in the GUI Section is only used in the gui and not a part of the actual code 
+	 */
 	final JFileChooser fc = new JFileChooser();
 	Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 	int scrW = screenSize.width;
 	int scrH = screenSize.height;
 
-	File requirementsDoc, goldenDoc;
+	//GUI Widgets
+	JPanel mDisplay, scrollText, button, infoPan;
+
+	JButton retrieveB;
+	JRadioButton analyze;
+	JTextArea infoField;
+	JLabel pRes;
+	JScrollPane infoScroll;
+	JCheckBox codeCB, commentCB;
+
 
 	//booleans for code and comment
 	boolean code = true;
 	boolean comment = true;
 	boolean banalyze = false;
 
-	public Retriever(){
-		setTitle("Retriever");
+	//---END OF GUI VARS
 
+
+
+	public Retriever(){
+		//--START OF GUI INITIALIZER CODE
+		setTitle("Retriever");
 		setSize(scrW, scrH/2);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 		buildGUI(this);
+		//---END OF GUI INITIALIZER CODE
+
+
+
 	}
 
 
 	public void buildGUI(Retriever r){
 
-
-		JPanel mDisplay, scrollText, button, infoPan;
-
-		JButton retrieveB;
-		JRadioButton analyze;
-		JTextArea infoField;
-		JLabel pRes;
-		JScrollPane infoScroll;
-		JCheckBox codeCB, commentCB;
 
 
 		mDisplay = new JPanel(new GridLayout(2,2,10,10));
@@ -68,7 +84,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 		infoField = new JTextArea();
 		infoField.setEditable(false);
-		
+
 		String test = "%-200s %-20s %-20s %-20s \n";
 		String toinsert = String.format(test,"File :", "Recall:" , "Precision:", "F-Measure:");
 		infoField.append(toinsert + "\n");
@@ -77,12 +93,12 @@ public class Retriever extends JFrame  implements ActionListener  {
 		//ScrollPane for text area
 		scrollText = new JPanel(new GridLayout(1,1));
 
-        // this makes the infoField scrollable
+		// this makes the infoField scrollable
 		infoScroll = new JScrollPane(infoField);  
 
 
 		scrollText.add(infoScroll);
-        mDisplay.add(scrollText);
+		mDisplay.add(scrollText);
 
 
 		// text area for f- data
@@ -95,7 +111,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 
 		infoPan.add(pRes, BorderLayout.CENTER);
-		
+
 
 
 		mDisplay.add(infoPan);
@@ -118,26 +134,26 @@ public class Retriever extends JFrame  implements ActionListener  {
 		analyze.setToolTipText("Choose Golden Standard Comparison File");
 		analyze.addActionListener(this);
 
-//  This is for later implementation to take into account code over comment importance
-//		//checkbox for code
-//		codeCB = new JCheckBox("Code");
-//		codeCB.setSelected(true);
-//		codeCB.setActionCommand("code");
-//		codeCB.addActionListener(this);
-//	
-//		//checkbox for comment
-//		commentCB = new JCheckBox("Comment");
-//		commentCB.setSelected(true);
-//		commentCB.setActionCommand("comment");
-//		commentCB.addActionListener(this);
-//		
+		//  This is for later implementation to take into account code over comment importance
+		//		//checkbox for code
+		//		codeCB = new JCheckBox("Code");
+		//		codeCB.setSelected(true);
+		//		codeCB.setActionCommand("code");
+		//		codeCB.addActionListener(this);
+		//	
+		//		//checkbox for comment
+		//		commentCB = new JCheckBox("Comment");
+		//		commentCB.setSelected(true);
+		//		commentCB.setActionCommand("comment");
+		//		commentCB.addActionListener(this);
+		//		
 
-		
+
 		button.add(retrieveB);
 		button.add(analyze);
-		
-//		button.add(codeCB);
-//		button.add(commentCB);
+
+		//		button.add(codeCB);
+		//		button.add(commentCB);
 
 
 		mDisplay.add(button);
@@ -147,7 +163,10 @@ public class Retriever extends JFrame  implements ActionListener  {
 	}
 
 
-
+	public void buildGolden(File f){
+		fScan = new Scanner(inF);
+		
+	}
 
 
 	public void actionPerformed(ActionEvent e){
@@ -180,8 +199,8 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 		// Opens the dialouge box for the golden text file if it is chosen
 		if("analyzeThis".equals(e.getActionCommand())){
-			
-            // checks to see if the radio button is selected
+
+			// checks to see if the radio button is selected
 			if(!banalyze){
 				System.out.println("Choose Golden Standard File.");
 				int returnVal = fc.showOpenDialog(Retriever.this);
@@ -190,27 +209,27 @@ public class Retriever extends JFrame  implements ActionListener  {
 					goldenDoc = fc.getSelectedFile();
 					System.out.println(goldenDoc.getAbsolutePath());
 				}
-			  banalyze = true;
+				banalyze = true;
 			}
 			else{
-			  banalyze = false;
+				banalyze = false;
 			}
 		}
 
-// Uncomment to use later in determining importance of  code vs comment		
-//		if("code".equals(e.getActionCommand())){
-//			if(code)
-//				code=false;	
-//			else
-//				code = true;
-//		}
-//		
-//		if("comment".equals(e.getActionCommand())){
-//			if(comment)
-//				comment=false;	
-//			else
-//				comment = true;
-//		}
+		// Uncomment to use later in determining importance of  code vs comment		
+		//		if("code".equals(e.getActionCommand())){
+		//			if(code)
+		//				code=false;	
+		//			else
+		//				code = true;
+		//		}
+		//		
+		//		if("comment".equals(e.getActionCommand())){
+		//			if(comment)
+		//				comment=false;	
+		//			else
+		//				comment = true;
+		//		}
 
 	}
 
@@ -221,6 +240,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 			public void run() {
 				Retriever ex = new Retriever();
 				ex.setVisible(true);
+
 			}
 		});
 
