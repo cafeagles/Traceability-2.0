@@ -1,21 +1,44 @@
 package Retriever;
 
+
+
 import java.util.List;
 import java.util.ListIterator;
 
-public class Document {
+
+
+public class Document implements Comparable<Document> {
 	public List<Weight> weights;
 	double theta;
 	String path;
+	int id;
+	double magnitude;
 
-
+	public int getId(){
+		return id;
+	}
+	public void setPath(String path){
+		this.path = path;
+	}
+	public String getPath(){
+		return path;
+	}
 	public Document(String path) {
 		
 	   this.path = path;	
 	}
 
+	public Document(int id){
+		this.id = id;
+	}
 
-
+	public void setMagnitude(double m){
+		magnitude = m;
+	}
+	
+	public double getMagnitude(){
+		return magnitude;
+	}
 	public void calculateTheta(Document query, Token[] keywords){
 
 		// used for summation of the squares 
@@ -80,6 +103,18 @@ public class Document {
 
 
 	}
+
+	public void setTheta(double c) {
+		theta = c;
+	}
+
+	@Override
+	public int compareTo(Document o) {
+		return (int)(this.theta - o.theta);
+		
+	}
+
+	
 
 }
 
