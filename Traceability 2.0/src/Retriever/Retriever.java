@@ -39,6 +39,8 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 
 	List<String> goldenDocs = new LinkedList<String>();
+	List<String> testDocs = new LinkedList<String>();
+	
 	String guiFormat = "%-75s%-20s%-20s%-20s \n";
 	static String test = "%-75s%-20.3f%-20.3f%-20.3f \n";
 	
@@ -120,7 +122,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 		infoPan.setLayout(new BorderLayout());
 
 
-		pRes = new JLabel("Total Precision:  ?          Total Recall:  ?                Total F-Measure: ?  " + "");
+		pRes = new JLabel("Files Retrieved:  ?          Total Precision:  ?          Total Recall:  ?                Total F-Measure: ?  " + "");
 
 
 		infoPan.add(pRes, BorderLayout.CENTER);
@@ -202,12 +204,13 @@ public class Retriever extends JFrame  implements ActionListener  {
 				String temp;
 				while (it.hasNext()) {
 					temp = it.next();
+					//
 					System.out.println(temp + " " + keywords.get(temp));
 				}
 				
 			}
 			
-			f_Measure(goldenDocs);
+			f_Measure(testDocs);
 		}
 
 
@@ -261,9 +264,17 @@ public class Retriever extends JFrame  implements ActionListener  {
 		try {
 			fScan = new Scanner(f);
 		} catch (FileNotFoundException e) {}
-
+		
+		String line;
+		int i = 0;
 		while(fScan.hasNextLine()){
-			goldenDocs.add(fScan.nextLine().trim());
+			i++;
+			line = fScan.nextLine().trim();
+			if(i%2==0){
+				testDocs.add(Integer.toString(i) +":"+ line);
+			}
+			goldenDocs.add(Integer.toString(i) +":"+ line);
+			
 		}
 
 //		//used for testing purposes
@@ -279,54 +290,63 @@ public class Retriever extends JFrame  implements ActionListener  {
 	
 	  // Get the running f_measure and total f_measure
 		public void f_Measure(List<String> retrieved){
+			
+			  
+			  
+			  
 			  String guiUpdate;
+			  
 		      double beta = 2;
 		      double betaSq = beta*beta;
-		      double betaPl = (1+beta) * (1+beta);
+		      double betaPl = 1+betaSq;
 		      
 		      double gold_Recall = goldenDocs.size();
 		      double our_Recall = retrieved.size();
+		      
+	          System.out.println(our_Recall);
 		      
 		      
 		      double goldIntersect = 0.0;
 		     
 		      double PR;
 		      
-		      double running_FMeasure = 0.0;
-		      double running_Precision= 0.0;
-		      double running_Recall = 0.0;
+		      double running_FMeasure = 0.000;
+		      double running_Precision= 0.000;
+		      double running_Recall = 0.000;
 		      
-		      for(String each:retrieved){
-		    	  if(goldenDocs.contains(each))
-		    		  goldIntersect += 1;
+		      for(String each:goldenDocs){
+		    	  if(retrieved.contains(each)){
+		    		  goldIntersect += 1.000;
+		    		 
 		    	  
+		    	  System.out.println(goldIntersect + ":" + each);
 		    	  
 		    	  
 		    	  running_Precision = goldIntersect / our_Recall;
 		    	  running_Recall = goldIntersect / gold_Recall;
 		    	  
+
 		    	  
 		    	  PR = running_Precision * running_Recall;
 		    	  
 		    	  // (1+beta)^2 * (P*R) / (beta^2 * P) + R
 		    	  running_FMeasure = (betaPl * PR)/(( running_Precision * betaSq) + running_Recall);
 		    	  
-		    	  DecimalFormat threeDec = new DecimalFormat("0.000");
 		    	  
-		    	
 		    	  infoField.append(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
-		    	  System.out.println(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
+		    	 // System.out.println(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
+		      }
 		    }
 		      
-		      String format = "Total Precision:  %.3f          Total Recall:  %.3f                Total F-Measure: %.3f";
-		      guiUpdate = String.format(format,running_Precision, running_Recall, running_FMeasure);
+		      String format = " Files Retrieved:  %.0f        Total Recall:  %.3f                Total Precision:  %.3f          Total F-Measure: %.3f";
+		      guiUpdate = String.format(format, our_Recall,running_Recall, running_Precision, running_FMeasure);
 		      pRes.setText(guiUpdate);
 		}
 
 
 
 
-
+ 
 
 	public static void main(String[] args) {
 		
