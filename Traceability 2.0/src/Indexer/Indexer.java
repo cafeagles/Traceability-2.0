@@ -34,6 +34,8 @@ public class Indexer{
 			System.out.println(args[0]);
 			e.printStackTrace();
 		}
+		Database db = Database.getInstance();
+		db.finish();
 		System.out.println("Finished Indexer");
 		
 		
@@ -43,7 +45,7 @@ public class Indexer{
 	private static void index(File f) throws FileNotFoundException{
 		
 //		System.out.println(" asdf");
-		String fileName = f.getPath();
+		String fileName = f.getName();
 		System.out.println("Indexing: " + fileName);
 //		System.out.println("jkl;");
 //		
@@ -102,7 +104,7 @@ public class Indexer{
 //				for(String s:tt.getCodeKeys())
 //					System.out.println(s);
 				db.storeTokens(tt,fileName);
-				db.closeConnect();
+//				db.closeConnect();
 				
 				
 				
