@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -164,7 +165,9 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 
 	public void buildGolden(File f){
-		fScan = new Scanner(inF);
+		try {
+			fScan = new Scanner(f);
+		} catch (FileNotFoundException e) {}
 		
 	}
 
