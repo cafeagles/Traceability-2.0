@@ -2,6 +2,7 @@ package Retriever;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ public class Retriever extends JFrame  implements ActionListener  {
        b1 = new JButton("Open");
        
        b1.setActionCommand("openDiag");
+       b1.setMnemonic(KeyEvent.VK_O);
        b1.addActionListener(this);
        add(b1);
        setTitle("Retriever");
