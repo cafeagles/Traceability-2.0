@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -33,6 +35,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 	Scanner fScan;
 
 
+         List<String> goldenDocs = new LinkedList<String>();
 	/*-- START OF GUI VARIABLES
 	 *All of the variables contained in the GUI Section is only used in the gui and not a part of the actual code 
 	 */
@@ -166,9 +169,18 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 	public void buildGolden(File f){
 		try {
-			fScan = new Scanner(f);
+		    fScan = new Scanner(f);
 		} catch (FileNotFoundException e) {}
-		
+                
+                while(fScan.hasNextLine()){
+			goldenDocs.add(fScan.nextLine());
+		}
+                
+                int size = goldenDocs.size();
+                
+                for (int i = 0; i < size; i++){
+                    System.out.println(goldenDocs.get(i));
+                }
 	}
 
 
@@ -211,6 +223,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					goldenDoc = fc.getSelectedFile();
 					System.out.println(goldenDoc.getAbsolutePath());
+                                        buildGolden(goldenDoc);
 				}
 				banalyze = true;
 			}
