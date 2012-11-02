@@ -137,7 +137,7 @@ public class RegexIndexer {
 		Scanner fileScanner;
 		TokenTracker tt = new TokenTracker();
 		try {
-			fileScanner = new Scanner(new File("C:\\Users\\Chris\\Desktop\\AddOfficeVisitAction.java"));
+			fileScanner = new Scanner(new File("C:\\Users\\Chris\\Desktop\\TransactionBean.java"));
 			while(fileScanner.hasNext())
 			{
 				i.buffer += fileScanner.nextLine() + "\n";

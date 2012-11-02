@@ -271,7 +271,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 			i++;
 			line = fScan.nextLine().trim();
 			if(i%2==0){
-				testDocs.add(Integer.toString(i) +":"+ line);
+				testDocs.add(Integer.toString(i) +":"+ line);//////////////////////////////////////////////////
 			}
 			goldenDocs.add(Integer.toString(i) +":"+ line);
 			
