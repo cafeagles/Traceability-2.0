@@ -1,11 +1,8 @@
 package Retriever;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -45,7 +41,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 	public Retriever(){
 		setTitle("Retriever");
 
-		setSize(scrW/2, scrH/2);
+		setSize(scrW, scrH/2);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -60,9 +56,9 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 		JButton retrieveB;
 		JRadioButton analyze;
-		JTextArea infoField,r_Dat,p_Dat,f_Dat;
-		JLabel pRes, rRes,fRes , pLab, rLab, fLab, fileLab;
-		JScrollPane infoScroll,r_DatS,p_DatS,f_DatS;
+		JTextArea infoField;
+		JLabel pRes;
+		JScrollPane infoScroll;
 		JCheckBox codeCB, commentCB;
 
 
@@ -71,40 +67,22 @@ public class Retriever extends JFrame  implements ActionListener  {
 		// Text area for the Scroll Area
 
 		infoField = new JTextArea();
-		r_Dat = new JTextArea();
-		p_Dat = new JTextArea();
-		f_Dat = new JTextArea();
+		infoField.setEditable(false);
+		
+		String test = "%-200s %-20s %-20s %-20s \n";
+		String toinsert = String.format(test,"File :", "Recall:" , "Precision:", "F-Measure:");
+		infoField.append(toinsert + "\n");
 
 
 		//ScrollPane for text area
-		scrollText = new JPanel(new GridLayout(2,1,10,-50));
-		//scrollText.setPreferredSize(new Dimension(scrW/3,100));
+		scrollText = new JPanel(new GridLayout(1,1));
 
-		//    	 rLab = new JLabel("");
-		//    	 pLab = new JLabel("");
-		//    	 fLab = new JLabel("");
-		fileLab = new JLabel("File:                                            |     Recall:     |         Precision:       |     F-Measure:");
-
-
+        // this makes the infoField scrollable
 		infoScroll = new JScrollPane(infoField);  
-		//    	 r_DatS =  new JScrollPane(r_Dat);
-		//    	 p_DatS =  new JScrollPane(p_Dat);
-		//    	 f_DatS =  new JScrollPane(r_Dat);
-		//    	 
 
-		//infoScroll.setPreferredSize(new Dimension(scrW/3,scrH/3));
-
-		scrollText.add(fileLab);
-		//    	 scrollText.add(pLab);
-		//    	 scrollText.add(rLab);
-		//    	 scrollText.add(fLab);
 
 		scrollText.add(infoScroll);
-		//    	 scrollText.add(p_DatS);
-		//    	 scrollText.add(r_DatS);
-		//    	 scrollText.add(f_DatS);
-		//    	 
-		mDisplay.add(scrollText);
+        mDisplay.add(scrollText);
 
 
 		// text area for f- data
@@ -112,16 +90,12 @@ public class Retriever extends JFrame  implements ActionListener  {
 		infoPan.setLayout(new BorderLayout());
 
 
-		JLabel blank = new JLabel(" ");
-
-		pRes = new JLabel("Total Precision:  (%s) \n    Total Recall:   (%s)  \n    Total F-Measure:  (%s)");
-
+		pRes = new JLabel("Total Precision:  ?          Total Recall:  ?                Total F-Measure: ?  " +
+				"");
 
 
 		infoPan.add(pRes, BorderLayout.CENTER);
-		//infoPan.add(rLab);
-		//infoPan.add(fLab);
-
+		
 
 
 		mDisplay.add(infoPan);
@@ -130,34 +104,40 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 		// button for retrieve
 		button = new JPanel(new FlowLayout());
-		button.setPreferredSize(new Dimension(scrW/3,500));
+		button.setPreferredSize(new Dimension(600,500));
 		retrieveB = new JButton("Run Retriever");
 		retrieveB.setActionCommand("openDiag");
 		retrieveB.setMnemonic(KeyEvent.VK_O);
 		retrieveB.setPreferredSize(new Dimension(200,50));
 		retrieveB.addActionListener(this);
 
+		//radio button for analysis
 		analyze = new JRadioButton("with Analysis");
 		analyze.setActionCommand("analyzeThis");
 		analyze.setMnemonic(KeyEvent.VK_A);
+		analyze.setToolTipText("Choose Golden Standard Comparison File");
 		analyze.addActionListener(this);
 
-		codeCB = new JCheckBox("Code");
-		codeCB.setSelected(true);
-		codeCB.setActionCommand("code");
-		codeCB.addActionListener(this);
-		// codeCB.addActionListener(this);
-		commentCB = new JCheckBox("Comment");
-		commentCB.setSelected(true);
-		commentCB.setActionCommand("comment");
-		commentCB.addActionListener(this);
-		// commentCB.addActionListener(this);
+//  This is for later implementation to take into account code over comment importance
+//		//checkbox for code
+//		codeCB = new JCheckBox("Code");
+//		codeCB.setSelected(true);
+//		codeCB.setActionCommand("code");
+//		codeCB.addActionListener(this);
+//	
+//		//checkbox for comment
+//		commentCB = new JCheckBox("Comment");
+//		commentCB.setSelected(true);
+//		commentCB.setActionCommand("comment");
+//		commentCB.addActionListener(this);
+//		
 
-
+		
 		button.add(retrieveB);
 		button.add(analyze);
-		button.add(codeCB);
-		button.add(commentCB);
+		
+//		button.add(codeCB);
+//		button.add(commentCB);
 
 
 		mDisplay.add(button);
@@ -216,20 +196,21 @@ public class Retriever extends JFrame  implements ActionListener  {
 			  banalyze = false;
 			}
 		}
-		
-		if("code".equals(e.getActionCommand())){
-			if(code)
-				code=false;	
-			else
-				code = true;
-		}
-		
-		if("comment".equals(e.getActionCommand())){
-			if(comment)
-				comment=false;	
-			else
-				comment = true;
-		}
+
+// Uncomment to use later in determining importance of  code vs comment		
+//		if("code".equals(e.getActionCommand())){
+//			if(code)
+//				code=false;	
+//			else
+//				code = true;
+//		}
+//		
+//		if("comment".equals(e.getActionCommand())){
+//			if(comment)
+//				comment=false;	
+//			else
+//				comment = true;
+//		}
 
 	}
 
