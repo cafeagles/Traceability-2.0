@@ -17,6 +17,10 @@ public class Document implements Comparable<Document> {
 	public int getId(){
 		return id;
 	}
+	
+	public String toString(){
+		return("Path: " + path+ "Theta: " + theta);
+	}
 	public void setPath(String path){
 		this.path = path;
 	}

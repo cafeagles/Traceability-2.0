@@ -24,8 +24,8 @@ public class Results {
 	private HashMap<Integer, Vector<Link>> linkTokenIndex = new HashMap<Integer, Vector<Link>>();
 	
 	
-    private HashMap<Integer, Token> tokenIdTracker = new HashMap<Integer, Token>();
-    private Vector<Document> docIdTracker = new Vector<Document>();
+//    private HashMap<Integer, Token> tokenIdTracker = new HashMap<Integer, Token>();
+//    private Vector<Document> docIdTracker = new Vector<Document>();
     private Vector<Link> links =  new Vector<Link>();
     int D;
  
@@ -50,17 +50,16 @@ public class Results {
     }
     
     public void calculateD(){
-    	D = docIdTracker.size();
+    	D = docIndex.size();
     }
     
-    
-  
+
     
     
     
     private void tokenCalc(){
-    	for(int i_token: tokenIdTracker.keySet()){
-    		Token t = tokenIdTracker.get(i_token);
+    	for(int i_token: tokenIndex.keySet()){
+    		Token t = tokenIndex.get(i_token);
     		t.DFI = linkTokenIndex.get(t.id).size();
     		t.calculateIDF(docIndex.size());
     		for(Link l: linkTokenIndex.get(t.id)){
@@ -111,7 +110,7 @@ public class Results {
     }
     
     private void calculateThetas(){
-    	double q_mag = Math.sqrt(tokenIdTracker.size());
+    	double q_mag = Math.sqrt(tokenIndex.size());
     	
     	int i = 0;
     	double c;
@@ -127,33 +126,107 @@ public class Results {
     	}
     }
     
- 
+    private void calculateIDF(Token t, int D){
+    	
+    }
     
-//    public String[] getBestDocs(int max){
-//    	String[] out = new String[max];
-//    	
-//    	
-//    	
-//    	return null;
-//    }
-//    
-    public Document[] getBestDocs(double e){
-    	Vector<Document> best = new Vector<Document>();
+    public String[] getBestDocs(int max){
+    	String[] out = new String[max];
+    	
+    	
+    	
+    	return null;
+    }
+    
+    public Document[] getBestDocs(double thetaThreshold){
+    	System.out.println("ABOUT TO PRINT"+ docIndex.size());
+    	for(int d: docIndex.keySet()){
+    		Document dom = docIndex.get(d);
+    		System.out.println(dom);
+    	}
+    	
+    	List<Document> best = new LinkedList<Document>();
     	for(int docId: docIndex.keySet()){
     		Document d = docIndex.get(docId);
-    		if(d.theta < e){
+    		System.out.println(d.getPath() + d.theta);
+    		if(d.theta < thetaThreshold){
     			best.add(d);
     		}
     		
     	}
     	List<Document> docList = best;
     	Collections.sort(docList);
-    	return (Document[]) docList.toArray();
+    	Document[] a = new Document[best.size()];
+    	for(int i = 0; i < best.size(); i++){
+    		a[i] = best.get(i);
+    	}
+    	return a;
+    	
     	
 		
     	
     }
-}
+    
+//    private void calculateMagnitudes(){
+//    	double mag;
+//    	for(Document d: docIdTracker){
+//    		
+//    	}
+//    }
+    public void calculateTheta(Document d){
+    	return;
+    }
+    
+    public void addLink(int tokenId, int docId, int linkCount){
+    	if(docId == 0){
+    		throw  new Error("docid 0");
+    	}
+		Token t = getToken(tokenId);
+		Document d = getDocument(docId);
+		Link l = new Link(d,t,linkCount);
+	
+		if(!linkDocIndex.containsKey(docId)){
+			linkDocIndex.put(docId, new Vector<Link>() );
+		}
+		linkDocIndex.get(docId).add(l);
+		
+//		if(!linkTokenIndex.containsKey(tokenId)){
+//			linkTokenIndex.put(docId, new Vector<Link>());
+//		}
+		Vector<Link> tmp = linkTokenIndex.get(tokenId);
+		if(tmp == null){
+			tmp = new Vector<Link>();
+			linkTokenIndex.put(tokenId,tmp);
+		}
+		tmp.add(l);
 
+	}
+    public Token getToken(int id){
+		if(tokenIndex.containsKey(id)){
+			return tokenIndex.get(id);
+		}
+		else{
+			Token tmp = new Token(id);
+			tokenIndex.put(id, tmp);
+			return tmp;
+		}
+		
+		
+	}
+	
+	public Document getDocument(int id){
+		if(docIndex.containsKey(id)){
+			return docIndex.get(id);
+			
+		}
+		else{
+			Document d = new Document(id);
+			docIndex.put(id,d);
+			return d;
+		}
+	}
 
     
+
+    
+}

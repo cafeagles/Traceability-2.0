@@ -16,9 +16,9 @@ import com.mysql.jdbc.Statement;
 
 public class Database {
 	
-	private final String dbName = "traceability";
-	private final String password = "freels";
-	private final String userName = "traceability_app";
+	private final String dbName = "Traceability";
+	private final String password = "admin";
+	private final String userName = "admin";
 	private final String ip = "24.233.212.34:3306";
 	private final String driver = "com.mysql.jdbc.Driver";
 	//	private final String url = ip;
@@ -61,12 +61,12 @@ public class Database {
     	
     }
 	public Results retrieve(String[] args){
-		
+		System.out.println(args[0]);
 		
 		StringBuffer argBuffer = new StringBuffer();
 		for(String s:args){
 			
-			argBuffer.append(s + ",");
+			argBuffer.append("'" + s + "',");
 		}
 		argBuffer.deleteCharAt(argBuffer.length()-1);
 		try {
