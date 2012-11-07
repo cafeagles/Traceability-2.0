@@ -7,114 +7,23 @@ import java.util.ListIterator;
 
 
 
-public class Document implements Comparable<Document> {
-	public List<Weight> weights;
+public class Document  {
+	String name;
 	double theta;
-	String path;
-	int id;
-	double magnitude;
-
-	public int getId(){
-		return id;
-	}
-	public void setPath(String path){
-		this.path = path;
-	}
-	public String getPath(){
-		return path;
-	}
-	public Document(String path) {
-		
-	   this.path = path;	
-	}
-
-	public Document(int id){
-		this.id = id;
-	}
-
-	public void setMagnitude(double m){
-		magnitude = m;
+	List<Intersection> intersections;
+	
+	
+	public Document(String name){
+		this.name = name;
 	}
 	
 	public double getMagnitude(){
-		return magnitude;
+		return 0;
+		//TODO Ã(  intersection_n^2 )
 	}
-	public void calculateTheta(Document query, Token[] keywords){
-
-		// used for summation of the squares 
-		double MagSumQ = 0 ;
-		double MagSumD = 0 ;
-
-		double MagQ = 0;
-		double MagD = 0;
-
-		// used to store the running dot product of the two vectors( not actually java vectors)   
-		double dotPro = 0;
-
-		ListIterator<Weight> qIt = query.weights.listIterator();
-		ListIterator<Weight> dIt = this.weights.listIterator();
-
-		Weight qCurrent = qIt.next();
-		Weight dCurrent = dIt.next(); 
-
-		if((qCurrent != null) || (dCurrent != null))
-			throw new Error("Document with no keywords associated");
-
-
-		// Looking through each Keyword (curTok) 
-		// Check curTok against the tokens of the weights qCurrent and dCurrent
-		//    If all 3 are equal
-		//    Dot product must be done
-		// Else Check to see if either of the current weights are equal to curTok
-		//    If one is, check if its iterator has a next and set it to that
-		//    If the iterator does not have a next, break
-		for(Token curTok: keywords){
-			if(qCurrent.tok == curTok && dCurrent.tok == curTok){
-				// Math explaination :
-				// This adds all non trivial vector products together to get the sum. (Dot Product) This reduces computation time 
-				// and space. The same is being done for the magnitudes of the vectors. The magnitudes will be square rooted
-				// after the sums are complete
-
-				dotPro += qCurrent.weight * dCurrent.weight;
-				MagSumQ += qCurrent.weight * qCurrent.weight;
-				MagSumD += dCurrent.weight * dCurrent.weight;
-			}
-			else{
-				if(qCurrent.tok == curTok){
-					if(qIt.hasNext())
-						qCurrent = qIt.next();
-					else
-						break;
-				}
-				if(dCurrent.tok == curTok){
-					if(dIt.hasNext())
-						dCurrent = dIt.next();
-					else
-						break;
-				}
-			}
-
-		}
-
-		MagQ = Math.sqrt(MagSumQ);
-		MagD = Math.sqrt(MagSumD);
-
-		theta = Math.acos(dotPro / (MagQ*MagD));
-
-
-	}
-
-	public void setTheta(double c) {
-		theta = c;
-	}
-
-	@Override
-	public int compareTo(Document o) {
-		return (int)(this.theta - o.theta);
-		
-	}
-
 	
-
+	public void setTheta(double theta){
+		this.theta = theta;
+	}
+	
 }
-

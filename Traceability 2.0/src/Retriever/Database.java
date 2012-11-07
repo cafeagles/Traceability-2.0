@@ -18,7 +18,7 @@ public class Database {
 	
 	private final String dbName = "traceability";
 	private final String password = "freels";
-	private final String userName = "traceability_app";
+	private final String userName = "Traceability_app";
 	private final String ip = "24.233.212.34:3306";
 	private final String driver = "com.mysql.jdbc.Driver";
 	//	private final String url = ip;
