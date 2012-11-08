@@ -32,5 +32,9 @@ public class Token {
     	//Iterate Each sections
     	//Intersection.weight = Intersection.TFI * Token.IDF
     }
+
+	public void addIntersection(Intersection i) {
+		intersections.add(i);		
+	}
     
 }

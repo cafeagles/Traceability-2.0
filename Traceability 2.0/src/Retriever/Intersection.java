@@ -6,9 +6,7 @@ public class Intersection {
 	private double weight;
 	private int tfi;
 	
-	public Intersection(Token t, Document d, int tfi){
-		this.t = t;
-		this.d = d;
+	public Intersection(int tfi){
 		this.tfi = tfi;
 	}
 	

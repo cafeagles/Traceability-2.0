@@ -39,4 +39,8 @@ public class Document  {
 		return intersections;
 	}
 
+	public void addIntersection(Intersection i) {
+		intersections.add(i);
+	}
+
 }
