@@ -27,6 +27,7 @@ public class Token {
 		double IDF = getIDF(d, DFI);
     	for(Intersection t: intersections){
     		t.setWeight(IDF * t.getTFI());
+    		//System.out.println(this.data + ":" + t.getTFI() + ":" + IDF + ":" + t.getWeight());
     	}
     	//TODO calcIntersectionWeights
     	//Find IDF here

@@ -47,5 +47,9 @@ public class Document  {
 	public String toString(){
 		return name;
 	}
+	
+	public double getTheta(){
+		return theta;
+	}
 
 }
