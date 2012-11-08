@@ -100,13 +100,11 @@ public class RegexIndexer {
 		m = Pattern.compile("\\S+").matcher(code);
 		String temp;
 		while (m.find()) {
-			temp = m.group();
-			temp.trim();
-			
+			temp = (m.group().toLowerCase()).trim();
 			//remove stop words
 			if (!stkwremover.removeWord(temp)) {
 				//stem
-				s.add(temp.toLowerCase().toCharArray(), temp.length());
+				s.add(temp.toCharArray(), temp.length());
 				s.stem();
 				temp = s.toString();
 				// add to the hashmap
