@@ -2,6 +2,7 @@ package Retriever;
 
 
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -10,7 +11,7 @@ import java.util.ListIterator;
 public class Document  {
 	String name;
 	double theta;
-	List<Intersection> intersections;
+	List<Intersection> intersections = new LinkedList<Intersection>();
 
 
 	public Document(String name){
@@ -41,6 +42,10 @@ public class Document  {
 
 	public void addIntersection(Intersection i) {
 		intersections.add(i);
+	}
+	
+	public String toString(){
+		return name;
 	}
 
 }

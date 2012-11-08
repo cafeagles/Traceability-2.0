@@ -7,10 +7,11 @@ import org.omg.CORBA.FREE_MEM;
 
 
 public class Token {
-    List<Intersection> intersections;
+    List<Intersection> intersections = new LinkedList<Intersection>();
+    String data;
     
-    public Token(){
-       
+    public Token(String data){
+       this.data = data;
     }
     
     public double getIDF(int d, int DFI){
@@ -35,6 +36,9 @@ public class Token {
 
 	public void addIntersection(Intersection i) {
 		intersections.add(i);		
+	}
+	public String toString(){
+		return data;
 	}
     
 }
