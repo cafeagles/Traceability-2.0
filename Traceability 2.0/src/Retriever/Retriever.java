@@ -258,6 +258,9 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 	// this gets the goldenfile txt and stores them for future manipulation.
 	public void buildGolden(File f){
+		testDocs = new LinkedList<String>();
+		goldenDocs = new LinkedList<String>();
+		
 		String filename;
 		String blank = "";
 		
@@ -290,8 +293,9 @@ public class Retriever extends JFrame  implements ActionListener  {
 	
 	  // Get the running f_measure and total f_measure
 		public void f_Measure(List<String> retrieved){
-			
-			  
+			 infoField.setText(" ");
+			 String toinsert = String.format(guiFormat,"File :", "Recall:" , "Precision:", "F-Measure:");
+			 infoField.append(toinsert + "\n");
 			  
 			  
 			  String guiUpdate;
@@ -334,6 +338,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 		    	  
 		    	  
 		    	  infoField.append(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
+		    	 
 		    	 // System.out.println(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
 		      }
 		    }

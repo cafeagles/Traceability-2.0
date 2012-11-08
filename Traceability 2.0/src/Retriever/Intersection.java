@@ -18,4 +18,13 @@ public class Intersection {
 	public int getTFI(){
 		return tfi;
 	}
+	
+	public double getWeight(){
+		return weight;
+	}
+	
+	public Token getToken(){
+		return t;
+	}
+	
 }
