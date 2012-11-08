@@ -36,8 +36,6 @@ public class VSM {
 
     
     public double getTheta(Document d1, Document d2){
-    	//String out = "%.3f";
-    	//System.out.println(String.format(out,dotProduct(d1,d2)));
         return dotProduct(d1, d2) / (d1.getMagnitude() * d2.getMagnitude());
         //dotProduct(d1,d2) / ( |d1| |d2|)
         //use Document.getMagnitude
@@ -45,7 +43,7 @@ public class VSM {
     
     //This can be used if the query is the default comparitor
     public double getTheta(Document d1){
-    	
+   
         return dotProduct(query,d1) / query.getMagnitude() * d1.getMagnitude();
     }
 
@@ -74,12 +72,12 @@ public class VSM {
         HashMap<Token,Double> dotCheck = new HashMap<Token, Double>();
 
         for(Intersection i : doc1){
-        	
+        	//System.out.println(i.getWeight());
             dotCheck.put(i.getToken(), i.getWeight());
         }
 
         for(Intersection i: doc2){
-        	System.out.println(i.getWeight());
+        	
             Token tokKey = i.getToken();
             if(dotCheck.containsKey(tokKey)){
                 dotProduct += dotCheck.get(tokKey) * i.getWeight();
@@ -94,9 +92,16 @@ public class VSM {
 
     public void calculateThetas(){
     	//System.out.println("pow camp");
+    	double tempTheta;
+    	String temp = "%.3f";
         for(Document d: documents){
-        	//System.out.println("pow camp2");
-            d.setTheta(getTheta(query, d));
+        	
+        	tempTheta = getTheta(query, d);
+        	System.out.println(String.format(temp,tempTheta));
+        	if(tempTheta > .68){
+        		System.out.println(d.name);
+        	}
+            d.setTheta(tempTheta);
         }   
     }
 
