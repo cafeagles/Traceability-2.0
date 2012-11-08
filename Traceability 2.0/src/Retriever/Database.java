@@ -180,9 +180,13 @@ public class Database {
 			for(int id: docMap.keySet()){
 				returnDocs.add(docMap.get(id));
 			}
+			int d = returnDocs.size();
 			for(String s: queryKeywords.keySet()){
-				if(queryKeywords.get(s) != null){
-					queryDoc.addIntersection(new Intersection(1));
+				Token t = queryKeywords.get(s);
+				if(t != null){
+					Intersection i = new Intersection(1);
+					i.setWeight(Math.log(d/t.getDfi()));
+					queryDoc.addIntersection(i);
 				}
 			}
 
