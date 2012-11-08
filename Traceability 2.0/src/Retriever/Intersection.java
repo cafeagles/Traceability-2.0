@@ -1,5 +1,5 @@
 package Retriever;
-
+//testing netbeans
 public class Intersection {
 	private Token t;
 	private Document d;
