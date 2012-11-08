@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+
+//TODO FIX SORT to sort the documents based on theta's
+
 public class VSM {
     List<Token> tokens;
     List<Document> documents;
@@ -27,6 +30,16 @@ public class VSM {
         //Set the weights in the intersections and then the thetas in the documents
         calculateWeights();
         calculateThetas();
+        
+        String template = "%.3f";
+        for(Document d: documents){
+        	
+        	if(d.getTheta() > 0.5){
+        		System.out.println(d.name);
+        		System.out.println(String.format(template,d.getTheta()));
+        		
+        	}
+        }
         
         Collections.sort(documents,new DocumentComparator());
         
@@ -93,14 +106,14 @@ public class VSM {
     public void calculateThetas(){
     	//System.out.println("pow camp");
     	double tempTheta;
-    	String temp = "%.3f";
+//    	String temp = "%.3f";
         for(Document d: documents){
         	
         	tempTheta = getTheta(query, d);
-        	System.out.println(String.format(temp,tempTheta));
+        /*	System.out.println(String.format(temp,tempTheta));
         	if(tempTheta > .68){
         		System.out.println(d.name);
-        	}
+        	}*/
             d.setTheta(tempTheta);
         }   
     }

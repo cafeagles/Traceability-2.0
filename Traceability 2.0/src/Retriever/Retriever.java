@@ -31,6 +31,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+//TODO integrate the VSM into the gui
+
 public class Retriever extends JFrame  implements ActionListener  {
 
 
@@ -245,6 +247,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 //                    System.out.println(temp + " " + keywords.get(temp));
 //                }
                 
+                //
                 mathModule = new VSM(keyWords);
                 
             }

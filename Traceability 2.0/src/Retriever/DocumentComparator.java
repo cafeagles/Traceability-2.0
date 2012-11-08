@@ -12,7 +12,7 @@ public class DocumentComparator implements Comparator{
 		
 		if(thetaD1 > thetaD2)
 			return 1;
-		else if(thetaD2> thetaD1)
+		else if(thetaD2 > thetaD1)
 			return -1;
 		else
 			return 0;
