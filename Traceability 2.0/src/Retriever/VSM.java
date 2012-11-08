@@ -45,7 +45,7 @@ public class VSM {
 		HashMap<Token,Double> dotCheck = new HashMap<Token, Double>();
 
 		for(Intersection i : doc1){
-			dotCheck.put(i.getToken(), i.weight);
+			dotCheck.put(i.getToken(), i.getWeight());
 		}
 
 		for(Intersection i: doc2){

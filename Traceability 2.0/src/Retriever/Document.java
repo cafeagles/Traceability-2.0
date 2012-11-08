@@ -24,7 +24,7 @@ public class Document  {
 
 		for (Intersection item: intersections)
 		{
-			temp +=Math.pow(item.weight,2);
+			temp +=Math.pow(item.getWeight(),2);
 		} 
 		return Math.sqrt(temp);
 

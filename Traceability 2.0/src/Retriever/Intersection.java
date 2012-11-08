@@ -1,10 +1,10 @@
 package Retriever;
 
 public class Intersection {
-	Token t;
-	Document d;
-	double weight;
-	int tfi;
+	private Token t;
+	private Document d;
+	private double weight;
+	private int tfi;
 	
 	public Intersection(Token t, Document d, int tfi){
 		this.t = t;
