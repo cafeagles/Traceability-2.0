@@ -62,12 +62,12 @@ public class StopKeywordRemover {
 			URL urlKey  = getClass().getResource("javaKeywords.txt");
 			
 			
-			inF = new File("C:\\Users\\Chris\\workspace\\Traceability\\Indexer\\enlishStopwords.txt");
+			inF = new File("C:\\temp\\enlishStopwords.txt");
 		    fScan = new Scanner(inF);
 		    addtoHash();
 			
 		  
-			inF = new File("C:\\Users\\Chris\\workspace\\Traceability\\Indexer\\javaKeywords.txt");
+			inF = new File("C:\\temp\\javaKeywords.txt");
 			fScan = new Scanner(inF);
 			addtoHash();
 			

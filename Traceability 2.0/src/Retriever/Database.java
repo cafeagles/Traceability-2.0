@@ -181,6 +181,7 @@ public class Database {
 				returnDocs.add(docMap.get(id));
 			}
 			int d = returnDocs.size();
+
 			for(String s: queryKeywords.keySet()){
 				Token t = queryKeywords.get(s);
 				if(t != null){

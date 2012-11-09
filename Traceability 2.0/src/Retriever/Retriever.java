@@ -236,7 +236,6 @@ public class Retriever extends JFrame  implements ActionListener  {
                 HashMap<String, Integer> keywords = uml.getKeywordMap();
                 keyWords = uml.getKeySet();
    
-               
                 
                 
 //                Iterator<String> it = keyWords.iterator();
@@ -249,7 +248,7 @@ public class Retriever extends JFrame  implements ActionListener  {
                 
                 //
                 mathModule = new VSM(keyWords);
-                
+                testDocs = mathModule.getDocsList();
             }
             
             f_Measure(testDocs);
@@ -331,7 +330,7 @@ public class Retriever extends JFrame  implements ActionListener  {
             if(i%2==0){
                 testDocs.add(Integer.toString(i) +":"+ line);//////////////////////////////////////////////////
             }
-            goldenDocs.add(Integer.toString(i) +":"+ line);
+            goldenDocs.add(":"+ line);
             
         }
 
