@@ -34,7 +34,10 @@ import javax.swing.SwingUtilities;
 //TODO integrate the VSM into the gui
 
 public class Retriever extends JFrame  implements ActionListener  {
-
+	
+	static double totalFval = 0.0;
+	static int retrieves = 0;
+	double averageFM= 0.0;
 
     static String file = new String();
     File requirementsDoc, goldenDoc;
@@ -81,7 +84,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 
     public Retriever(){
         //--START OF GUI INITIALIZER CODE
-        setTitle("Retriever");
+        setTitle("--Golden Retriever--");
         setSize(scrW, scrH/2);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -221,6 +224,7 @@ public class Retriever extends JFrame  implements ActionListener  {
 
 
         if("openDiag".equals(e.getActionCommand())){
+        	retrieves++;
             int returnVal = fc.showOpenDialog(Retriever.this);
 
             if(returnVal == JFileChooser.APPROVE_OPTION){
@@ -397,6 +401,9 @@ public class Retriever extends JFrame  implements ActionListener  {
                  // System.out.println(String.format(test, each , running_Recall, running_Precision, running_FMeasure));
               }
             }
+              totalFval += running_FMeasure;
+              averageFM = totalFval / retrieves;
+              System.out.println("Average:" + averageFM);
               
               String format = " Files Retrieved:  %.0f        Total Recall:  %.3f                Total Precision:  %.3f          Total F-Measure: %.3f";
               guiUpdate = String.format(format, our_Recall,running_Recall, running_Precision, running_FMeasure);
@@ -430,6 +437,9 @@ public class Retriever extends JFrame  implements ActionListener  {
 
             }
         });
+        
+        
+        
 
     } 
 
