@@ -13,6 +13,16 @@ public class Intersection {
 	public void setWeight(double w){
 		weight = w;
 	}
+	
+	public void setToken(Token t){
+		this.t =t;
+
+	}
+	
+	public void setDocument(Document d){
+		this.d = d;
+	}
+	
 	public int getTFI(){
 		return tfi;
 	}
@@ -23,6 +33,10 @@ public class Intersection {
 	
 	public Token getToken(){
 		return t;
+	}
+	
+	public Document getDocument(){
+		return d;
 	}
 	
 }

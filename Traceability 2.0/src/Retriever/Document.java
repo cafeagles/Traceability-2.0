@@ -28,7 +28,7 @@ public class Document  {
 			temp +=Math.pow(item.getWeight(),2);
 		} 
 		
-		System.out.println("Mag:" + name + ":" + Math.sqrt(temp));
+		//System.out.println("Mag:" + name + ":" + Math.sqrt(temp));
 		return Math.sqrt(temp);
 
 

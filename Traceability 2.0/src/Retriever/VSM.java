@@ -39,7 +39,7 @@ public class VSM {
 		for(Document d: documents){
 
 			if(d.getTheta() > .01){
-				System.out.println(String.format(template,d.getTheta()) + d.name);
+				System.out.println(String.format(template,d.getTheta()) + ":" +  d.name);
 
 			}
 		}
@@ -49,18 +49,7 @@ public class VSM {
 
 
 	public double getTheta(Document d1, Document d2){
-		if(d1.name.equals("TransactionType.java")){
-			String temp = "%.3f";
 			
-			System.out.println("++++++===++++++");
-			System.out.println(String.format(temp,dotProduct(d1, d2)));
-			System.out.println("-");
-			System.out.println(String.format(temp,d1.getMagnitude()));
-			System.out.println("-");
-			System.out.println(String.format(temp,d1.getMagnitude()));
-			System.out.println("++++++===++++++");
-		}
-		
 		return dotProduct(d1, d2) / (d1.getMagnitude() * d2.getMagnitude());
 		//dotProduct(d1,d2) / ( |d1| |d2|)
 		//use Document.getMagnitude
@@ -85,13 +74,14 @@ public class VSM {
 		List<String> docs = new LinkedList();
 		
 		for(Document d: documents){
-			docs.add(":"+d.name);
+			if(d.theta > 0.12)
+			  docs.add(":"+d.name);
 		}
 		
 		return docs;
 	}
 
-	public double dotProduct(Document d1, Document d2){
+	public static double dotProduct(Document d1, Document d2){
 		// This takes all of the intersections from the query and stores them to a hashmap
 		// Then run through all the intersections of the comparative document and check to
 		// to see if the tokens between them match.
@@ -105,27 +95,40 @@ public class VSM {
 		doc1 = d1.getIntersections();
 		doc2 = d2.getIntersections();
 
-		HashMap<Token,Double> dotCheck = new HashMap<Token, Double>();
+		//System.out.println(doc1.size());
+		
+		HashMap<Integer,Double> dotCheck = new HashMap<Integer, Double>();
 
 		for(Intersection i : doc1){
-			//System.out.println(i.getWeight());
-			dotCheck.put(i.getToken(), i.getWeight());
+//			System.out.println(i.getToken().data);
+			dotCheck.put(i.getToken().hashCode(), i.getWeight());
 		}
+		
+		//System.out.println(dotCheck.size());
 
 		for(Intersection i: doc2){
+			
+			//System.out.println(i.getToken().data);
+			
+//			if(d2.name.equals("TransactionType.java")){
+//				System.out.println("--");
+//				double thing = i.getWeight();
+//				System.out.println("HEY:" + thing );
+//			}
 
-			Token tokKey = i.getToken();
+			int tokKey = i.getToken().hashCode();
 			if(dotCheck.containsKey(tokKey)){
 				dotProduct += dotCheck.get(tokKey) * i.getWeight();
 			}
 		}
 
 		String temp = "%.3f";
-		System.out.println(d2.name + ":" + dotProduct);
+		//System.out.println(d2.name + ":" + dotProduct);
 		return dotProduct;
 
 	}
 
+	
 
 	public void calculateThetas(){
 		//System.out.println(documents.size());
@@ -151,7 +154,77 @@ public class VSM {
 
 
 	public static void main(String[] args) {
-
+		Document d1 = new Document("one");
+		Document d2 = new Document("two");
+		
+		Token t1 = new Token("doctor");
+		Token t2 = new Token("patient");
+		Token t3 = new Token("medic");
+		Token t4 = new Token("blue");
+		
+		Intersection d1t1 = new Intersection(1);
+		d1t1.setToken(t1);
+		d1t1.setWeight(5);
+		d1.addIntersection(d1t1);
+		t1.addIntersection(d1t1);
+		
+		Intersection d1t2 = new Intersection(1);
+		d1t2.setToken(t2);
+		d1t2.setWeight(1);
+		d1.addIntersection(d1t2);
+		t2.addIntersection(d1t2);
+		
+		Intersection d1t3 = new Intersection(1);
+		d1t3.setToken(t3);
+		d1t3.setWeight(0);
+		d1.addIntersection(d1t3);
+		t3.addIntersection(d1t3);
+		
+		Intersection d1t4 = new Intersection(0);
+		d1t4.setToken(t4);
+		d1t4.setWeight(3);
+		d1.addIntersection(d1t4);
+		t4.addIntersection(d1t4);
+		
+		
+		Intersection d2t1 = new Intersection(2);
+		d2t1.setToken(t1);
+		d2t1.setWeight(2);
+		d2.addIntersection(d2t1);
+		t1.addIntersection(d2t1);
+		
+		Intersection d2t2 = new Intersection(3);
+		d2t2.setToken(t2);
+		d2t2.setWeight(3);
+		d2.addIntersection(d2t2);
+		t2.addIntersection(d2t2);
+		
+		Intersection d2t3 = new Intersection(0);
+		d2t3.setToken(t3);
+		d2t3.setWeight(4);
+		d2.addIntersection(d2t3);
+		t3.addIntersection(d2t3);
+		
+		Intersection d2t4 = new Intersection(1);
+		d2t4.setToken(t4);
+		d2t4.setWeight(5);
+		d2.addIntersection(d2t4);
+		t4.addIntersection(d2t4);
+		
+		
+		double dot = dotProduct(d1,d2);
+		double theta = dot / d1.getMagnitude()*d2.getMagnitude();
+		
+		
+		
+		
+//		String temp = "%.3f : %.3f";
+//		System.out.println(String.format(temp, d1.getMagnitude(),d2.getMagnitude()));
+//		System.out.println(String.format(temp, dot,theta));
+//		
+		
+		
+		
 	}
 
 

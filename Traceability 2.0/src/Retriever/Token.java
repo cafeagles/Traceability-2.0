@@ -10,6 +10,8 @@ public class Token {
     List<Intersection> intersections = new LinkedList<Intersection>();
     String data;
     
+    
+    
     public Token(String data){
        this.data = data;
     }
@@ -40,6 +42,12 @@ public class Token {
 	}
 	public String toString(){
 		return data;
+	}
+	
+	// Test for hash code
+	
+	public int hashCode(){
+		return this.toString().hashCode();
 	}
     
 }

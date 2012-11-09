@@ -278,6 +278,7 @@ public class Retriever extends JFrame  implements ActionListener  {
         
         // Opens popUp for the visual golden comparison
         if("viewGold".equals(e.getActionCommand())){
+        	popup.setText("");
             popup.append("Golden Files: \n\n");
             for(String s: goldenDocs){
                 popup.append(s + "\n");

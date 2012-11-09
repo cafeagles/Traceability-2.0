@@ -167,6 +167,10 @@ public class Database {
 				}
 				// 	each.document = getDocument(DocID)
 				Document eachDocument = getDoc(documentId, documentName);
+				
+				//System.out.println(eachToken);
+				eachIntersection.setToken(eachToken);
+				//eachIntersection.setDocument(eachDocument);
 				//	each.token.addIntersection(each.Intersection)
 				eachToken.addIntersection(eachIntersection);
 				//	each.document.addIntersection(each.Intersection)
@@ -186,6 +190,7 @@ public class Database {
 				Token t = queryKeywords.get(s);
 				if(t != null){
 					Intersection i = new Intersection(1);
+					i.setToken(t);
 					i.setWeight(Math.log(d/t.getDfi()));
 					queryDoc.addIntersection(i);
 				}
